@@ -62,10 +62,11 @@ def localization(country_loc, call_super=False):
                     _logger.info(method.__name__)
                     _logger.info(self.__class__.name)
                     parent = getattr(
-                        super(self.__class__, self), method.__name__)
+                        super(self.__class__.__bases__[0], self),
+                        method.__name__)
                     _logger.info(parent)
                     if parent:
-                        parent(args, kwargs)
+                        parent(self, *args, **kwargs)
                 else:
                     _logger.info(
                         'country_loc is not %s, function is overriden'
