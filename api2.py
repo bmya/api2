@@ -25,7 +25,7 @@ __license__ = "LGPL 3.0"
 _logger = logging.getLogger(__name__)
 
 
-def localization(country_loc):
+def localization(country_loc, call_super=False):
     """
     Decorator method to prevent execution of methods inherent to localization
     @author: Blanco Martín & Asociados.
@@ -46,6 +46,12 @@ def localization(country_loc):
                     'country_loc is ok: %s. executing decorated method'
                     % country_loc)
                 method(self, *args, **kwargs)
+            elif call_super:
+                _logger.info('######----CALL SUPER---########')
+                _logger.info(method)
+                _logger.info(method.__name__)
+                _logger.info(self.__class__)
+                values = getattr(super(self.__class__, self), fnct.__name__)
             else:
                 _logger.info(
                     'country_loc is not %s, function is overriden'
