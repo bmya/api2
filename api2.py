@@ -36,12 +36,12 @@ def localization(country_loc):
                     'base.'+country_loc) == self.env.user.company_id.country_id:
                 # if country_loc == 'cl':
                 _logger.info(
-                    'country_loc is ok: %s. executing decorated method %s'
-                    % country_loc, method.__name__)
+                    'country_loc is ok: %s. executing decorated method'
+                    % country_loc)
                 method(self, *args, **kwargs)
             else:
                 _logger.info(
-                    'country_loc is not %s, function %s overriden'
-                    % country_loc, method.__name__)
+                    'country_loc is not %s, function is overriden'
+                    % country_loc)
         return wrapper
     return inner
