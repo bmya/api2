@@ -35,7 +35,7 @@ def localization(country_loc, call_super=False):
     :return: execution of decorated method
     """
     _logger.info('Entering main decorator: localization')
-    _logger.info('Country Loc: %s, call_super:' % country_loc, call_super)
+    _logger.info('Country Loc: %s, call_super: %s' % country_loc, call_super)
 
     def inner(method):
         _logger.info('Entering inner inside decorator: inner')
