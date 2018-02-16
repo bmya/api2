@@ -31,6 +31,7 @@ def localization(country_loc, call_super=False):
     @author: Blanco Martín & Asociados.
     @version: 2018-02
     :param country_loc: two-digit code for country (e.g.: 'cl', 'ar')
+    :param call_super: false or true if it is needed to call super
     :return: execution of decorated method
     """
     _logger.info('Entering main decorator: localization')
@@ -39,6 +40,13 @@ def localization(country_loc, call_super=False):
         _logger.info('Entering inner inside decorator: inner')
 
         def wrapper(self, *args, **kwargs):
+            _logger.info('######----enter function---########')
+            _logger.info(method)
+            _logger.info('######----name function---########')
+            _logger.info(method.__name__)
+            _logger.info('######----class function---########')
+            _logger.info(self.__class__)
+
             _logger.info('Entering inside inner: wrapper')
             if self.env.ref(
                     'base.'+country_loc) == self.env.user.company_id.country_id:
@@ -46,16 +54,17 @@ def localization(country_loc, call_super=False):
                     'country_loc is ok: %s. executing decorated method'
                     % country_loc)
                 method(self, *args, **kwargs)
-            elif call_super:
-                _logger.info('######----CALL SUPER---########')
-                _logger.info(method)
-                _logger.info(method.__name__)
-                _logger.info(self.__class__)
-                values = getattr(super(self.__class__, self), fnct.__name__)
             else:
-                _logger.info(
-                    'country_loc is not %s, function is overriden'
-                    % country_loc)
+                if call_super:
+                    _logger.info('######----CALL SUPER---########')
+                    _logger.info(method)
+                    _logger.info(method.__name__)
+                    _logger.info(self.__class__)
+                    values = getattr(super(self.__class__, self), fnct.__name__)
+                else:
+                    _logger.info(
+                        'country_loc is not %s, function is overriden'
+                        % country_loc)
         return wrapper
     return inner
 
