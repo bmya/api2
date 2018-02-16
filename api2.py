@@ -35,7 +35,7 @@ def localization(country_loc, call_super=False):
     :return: execution of decorated method
     """
     _logger.info('Entering main decorator: localization')
-
+    _logger.info('Country Loc: %s, call_super:' % country_loc, call_super)
     def inner(method):
         _logger.info('Entering inner inside decorator: inner')
 
@@ -46,7 +46,6 @@ def localization(country_loc, call_super=False):
             _logger.info(method.__name__)
             _logger.info('######----class function---########')
             _logger.info(self.__class__)
-
             _logger.info('Entering inside inner: wrapper')
             if self.env.ref(
                     'base.'+country_loc) == self.env.user.company_id.country_id:
