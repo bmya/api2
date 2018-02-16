@@ -60,7 +60,8 @@ def localization(country_loc, call_super=False):
                     _logger.info(method)
                     _logger.info(method.__name__)
                     _logger.info(self.__class__)
-                    values = getattr(super(self.__class__, self), fnct.__name__)
+                    values = getattr(
+                        super(self.__class__, self), method.__name__)
                 else:
                     _logger.info(
                         'country_loc is not %s, function is overriden'
