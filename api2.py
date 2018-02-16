@@ -10,12 +10,13 @@
 # or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 # for more details.
 from __future__ import print_function
+import collections
 import logging
 
 
 """
-Miscelaneous auxiliar modules for Odoo, consisting in decorator and other
-methods for general purposes, including localization constriaint
+Miscellaneous modules for Odoo, consisting in decorator and other
+methods for general purposes, including localization constraint
 """
 __author__ = "Blanco Martín & Asociados (info@blancomartin.cl)"
 __copyright__ = "Copyright (C) 2018 Blanco Martín y Asoc. EIRL - BMyA S.A."
@@ -25,6 +26,13 @@ _logger = logging.getLogger(__name__)
 
 
 def localization(country_loc):
+    """
+    Decorator method to prevent execution of methods inherent to localization
+    @author: Blanco Martín & Asociados.
+    @version: 2018-02
+    :param country_loc: two-digit code for country (e.g.: 'cl', 'ar')
+    :return: execution of decorated method
+    """
     _logger.info('Entering main decorator: localization')
 
     def inner(method):
@@ -34,7 +42,6 @@ def localization(country_loc):
             _logger.info('Entering inside inner: wrapper')
             if self.env.ref(
                     'base.'+country_loc) == self.env.user.company_id.country_id:
-                # if country_loc == 'cl':
                 _logger.info(
                     'country_loc is ok: %s. executing decorated method'
                     % country_loc)
@@ -45,3 +52,47 @@ def localization(country_loc):
                     % country_loc)
         return wrapper
     return inner
+
+
+def to_json(col_names, rows):
+    """
+    Method used inside db_handler decorator, to deliver dataset in JSON format
+    @author: Blanco Martín & Asociados.
+    @version: 2018-02
+    :param col_names:
+    :param rows:
+    :return:
+    """
+    all_data = []
+    for row in rows:
+        each_row = collections.OrderedDict()
+        i = 0
+        for col_name in col_names:
+            each_row[col_name] = row[i]
+            i += 1
+        all_data.append(each_row)
+    return all_data
+
+
+def db_handler(method):
+    """
+    Decorator db_handler used to deliver dataset in JSON format
+    @author: Blanco Martín & Asociados.
+    @version: 2018-02
+    :param method:
+    :return:
+    """
+    def call(self, *args, **kwargs):
+        _logger.info(args)
+        query = method(self, *args, **kwargs)
+        cursor = self.env.cr
+        try:
+            cursor.execute(query)
+        except:
+            return False
+        rows = cursor.fetchall()
+        col_names = [desc[0] for desc in cursor.description]
+        _logger.info('col_names: {}'.format(col_names))
+        _logger.info('rows: {}'.format(rows))
+        return to_json(col_names, rows)
+    return call
