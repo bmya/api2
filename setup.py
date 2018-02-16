@@ -22,7 +22,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='api2',
-    version='0.2',
+    version='0.3',
     url='https://github.com/bmya/api2',
     license='LGPL-3',
     author='Blanco Martín & Asociados',
