@@ -76,7 +76,8 @@ def to_json(col_names, rows):
 
 def db_handler(method):
     """
-    Decorator db_handler used to deliver dataset in JSON format
+    Decorator db_handler used to deliver query execution, and in JSON format
+    Usage: decorate a method that returns your desired query in Odoo
     @author: Blanco Martín & Asociados.
     @version: 2018-02
     :param method:
