@@ -36,6 +36,7 @@ def localization(country_loc, call_super=False):
     """
     _logger.info('Entering main decorator: localization')
     _logger.info('Country Loc: %s, call_super:' % country_loc, call_super)
+
     def inner(method):
         _logger.info('Entering inner inside decorator: inner')
 
